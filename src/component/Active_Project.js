@@ -1,12 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
-
 import ap from '../media/02_Active projects.png'
 
 class ActiveProject extends React.Component {
-    componentDidMount() {
+    componentWillMount() {
         setTimeout(() => {
-            this.props.next();
+            this.props.history.push({
+                pathname: '/csatreceived',
+                state: { apidata: this.props.location.state.apidata }
+            })
         }, 5000);
     }
     render() {
@@ -17,13 +18,4 @@ class ActiveProject extends React.Component {
         );
     }
 }
-function mapDispatchToPropsCsat(dispatch) {
-    return ({
-        next: () => {
-            console.log("CLICK");
-            dispatch({ type: "NEXT" })
-        }
-    });
-}
-
-export default connect(null, mapDispatchToPropsCsat)(ActiveProject);
+export default ActiveProject;

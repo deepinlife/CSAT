@@ -1,11 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import pn from '../media/01_Project insight.png';
 
 class ProjectInsight extends React.Component {
-    componentDidMount() {
+    componentWillMount() {
+        let maindata = this.props.location.state.apidata;
         setTimeout(() => {
-            this.props.next();
+            this.props.history.push({
+                pathname: '/activeproject',
+                state: { apidata: maindata }
+            })
         }, 5000);
     }
     render() {
@@ -16,20 +19,4 @@ class ProjectInsight extends React.Component {
         );
     }
 }
-function mapStateToProps(state) {
-    //console.log(state.rootRecuer);
-    return ({
-        data: state.rootRecuer.data,
-        counter: state.rootRecuer.counter
-    })
-}
-function mapDispatchToPropsCsat(dispatch) {
-    return ({
-        next: () => {
-            console.log("CLICK");
-            dispatch({ type: "NEXT" })
-        }
-    });
-}
-
-export default connect(null, mapDispatchToPropsCsat)(ProjectInsight);
+export default ProjectInsight;

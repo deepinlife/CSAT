@@ -3,17 +3,17 @@ import { withRouter, Route, Switch } from 'react-router-dom';
 import ProjectInsight from './Project_Insight.js';
 import ActiveProject from './Active_Project.js';
 import CsatReceived from './Csat_Received.js';
+import ProjectDetails from './Project_Details';
 import Animate from './Animate.js';
 import jdata from '../data/data.json';
-import { addRoute } from "../redux/Action/addRoute";
-import { connect } from 'react-redux'
 import DummyIntro from './DummyIntro.js';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mtime: 3000
+            mtime: 3000,
+            auth: false
         }
 
     }
@@ -43,63 +43,35 @@ class App extends React.Component {
     // }
     componentDidMount() {
         const rt = ['/projectinsight', '/activeproject', '/csatreceived'];
+        const data = ['3', '5', '10'];
         jdata.map((i, d) => {
             i.route = rt[d % 3];
+            i.developers = data[d % 3];
         })
-        setTimeout(() => this.props.changeStateToReducer(jdata), 3000);
-
-    }
-
-    componentWillReceiveProps() {
-        console.log("PROP REDCEIVED", this.props.counter);
-        (this.props.counter != -1) ? this.handleRoute() : ""
-    }
-    // componentWillMount() {
-    //     //  this.props.initRedux();
-    //     this.props.next();
-
-    // }
-    handelButton() {
-    }
-    handleRoute() {
-        let r = "/";
-        r = this.props.data[this.props.counter].route;
-        console.log(r);
-        this.props.history.push(r);
+        console.log("data received");
+        //  this.setState({ auth: true });
+        let t = 0;
+        setTimeout(() => {
+            this.props.history.push({
+                pathname: '/projectinsight',
+                state: { apidata: jdata[0] }
+            })
+            console.log(jdata[0])
+        }, 100)
     }
     render() {
         return (
             <div>
-                <button onClick={this.handelButton.bind(this)} />
                 <Switch>
                     <Route path='/projectinsight' exact component={Animate(ProjectInsight)} />
                     <Route path='/activeproject' exact component={Animate(ActiveProject)} />
                     <Route path='/csatreceived' exact component={Animate(CsatReceived)} />
-                    <Route path='/' exact component={Animate(DummyIntro)} />
+                    <Route path='/projectdetails' exact component={Animate(ProjectDetails)} />
                 </Switch>
             </div>
         );
     }
 }
-function mapStateToProps(state) {
-    return ({
-        data: state.rootRecuer.data,
-        counter: state.rootRecuer.counter
-    })
-}
-function mapDispatchToPropsCsat(dispatch) {
-    return ({
-        changeStateToReducer: (csat) => {
-            dispatch(addRoute(csat))
-        },
-        initRedux: () => {
-            dispatch({ type: "DUMMY" })
-        },
-        next: () => {
-            console.log("CLICK");
-            dispatch({ type: "NEXT" })
-        }
-    });
-}
 
-export default connect(mapStateToProps, mapDispatchToPropsCsat)(withRouter(App));
+
+export default withRouter(App);

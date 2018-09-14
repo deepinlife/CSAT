@@ -1,12 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
-
 import cr from '../media/03_Csat received.png'
 
 class CsatReceived extends React.Component {
-    componentDidMount() {
+    componentWillMount() {
         setTimeout(() => {
-            this.props.next();
+            this.props.history.push({
+                pathname: '/projectdetails',
+                state: { apidata: this.props.location.state.apidata }
+            })
         }, 5000);
     }
     render() {
@@ -17,12 +18,4 @@ class CsatReceived extends React.Component {
         );
     }
 }
-function mapDispatchToPropsCsat(dispatch) {
-    return ({
-        next: () => {
-            console.log("CLICK");
-            dispatch({ type: "NEXT" })
-        }
-    });
-}
-export default connect(null, mapDispatchToPropsCsat)(CsatReceived);
+export default CsatReceived;
